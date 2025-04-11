@@ -25,37 +25,6 @@ export default function Home() {
     const newCount = responseCount + 1;
     setResponseCount(newCount);
 
-    // AIで話題分類（別エンドポイントを叩く）
-    if (newCount % 3 === 0) {
-      const topicRes = await fetch("/api/topic", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input }),
-      });
-      const topicData = await topicRes.json();
-
-      const topic = topicData.topic;
-      const getAffiliateMessage = (topic) => {
-        switch (topic) {
-          case "relax":
-            return `疲れてんじゃねーの？www これでも使っとけよ → [爆睡入浴剤](https://www.amazon.co.jp/dp/B01N7OAH3I?tag=YOUR-ID)`;
-          case "gift":
-            return `誕生日アピールうざw これでも贈っとけよ → [Amazonギフト券](https://www.amazon.co.jp/dp/B004N3APGO?tag=YOUR-ID)`;
-          case "study":
-            return `勉強とか意識高すぎて草w ほれ → [集中サプリ](https://www.amazon.co.jp/dp/B08L5Y7R3Z?tag=YOUR-ID)`;
-          case "love":
-            return `恋バナとか昭和かよw これでも使ってろ → [モテ香水](https://www.amazon.co.jp/dp/B0012ZS1FE?tag=YOUR-ID)`;
-          default:
-            return null;
-        }
-      };
-
-      const affiliateMsg = getAffiliateMessage(topic);
-      if (affiliateMsg) {
-        updatedLog.push({ sender: "bot", text: affiliateMsg });
-      }
-    }
-
     setChatLog(updatedLog);
   };
 
@@ -97,6 +66,21 @@ export default function Home() {
             </div>
           </div>
         ))}
+
+        {/* 3回に1回広告表示 */}
+        {responseCount > 0 && responseCount % 3 === 0 && (
+          <div className="w-full bg-white border border-gray-300 rounded p-4 text-center shadow mt-4">
+            <ins className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-7289968025162748"
+              data-ad-slot="1234567890"
+              data-ad-format="auto"
+              data-full-width-responsive="true"></ins>
+            <script>
+              {(adsbygoogle = window.adsbygoogle || []).push({})}
+            </script>
+          </div>
+        )}
       </div>
 
       {/* 入力欄と送信UI */}
@@ -116,9 +100,15 @@ export default function Home() {
           >
             生成
           </button>
-        </div>
-      </div>
-    </div>
+          </div> {/* 入力欄と送信UIの外divここで閉じる */}
+
+        {/* ページ最下部の AdSense スクリプト */}
+        <div dangerouslySetInnerHTML={{
+          __html: `
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7289968025162748"
+            crossorigin="anonymous"></script>
+          `
+        }} />
+      </div> {/* ← ← ← 最外部の return 全体（ページ全体）を閉じる */}
   );
 }
-
