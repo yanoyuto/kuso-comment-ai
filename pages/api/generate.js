@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { prompt, style, intensity } = req.body;
+  const { prompt, style } = req.body; // ← intensityはもう受け取らない！
 
   const stylePrompt = {
     "5ch風": "5chのスレに書かれていそうな、短く攻撃的でネタっぽい煽り口調でコメントしてください。",
@@ -17,14 +17,12 @@ export default async function handler(req, res) {
     "冷静な皮肉": "一見丁寧で冷静に見えるが、じわじわ刺さる皮肉を含んだコメントにしてください。",
   }[style] || "煽りコメントを作ってください。";
 
-  const intensityPrompt = `煽り強度は ${intensity}/10 で調整してください。`;
-
   try {
     const chatCompletion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo", // or "gpt-4" if使用可能
       messages: [
         { role: "system", content: stylePrompt },
-        { role: "user", content: `${prompt}\n\n${intensityPrompt}` },
+        { role: "user", content: prompt }, // intensityPrompt 削除！
       ],
     });
 

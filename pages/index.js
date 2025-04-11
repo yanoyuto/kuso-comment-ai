@@ -3,81 +3,81 @@ import { useState } from "react";
 export default function Home() {
   const [input, setInput] = useState("");
   const [style, setStyle] = useState("5ch風");
-  const [intensity, setIntensity] = useState(5);
-  const [result, setResult] = useState("");
+  const [chatLog, setChatLog] = useState([]);
 
   const handleSubmit = async () => {
+    if (!input.trim()) return;
+
+    // ユーザーの発言を追加
+    const newLog = [...chatLog, { sender: "user", text: input }];
+    setChatLog(newLog);
+    setInput(""); // 入力クリア
+
+    // AIに送信
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: input, style, intensity }),
+      body: JSON.stringify({ prompt: input, style }),
     });
+
     const data = await res.json();
-    setResult(data.comment);
+
+    // AIの返答を追加
+    setChatLog([...newLog, { sender: "bot", text: data.comment }]);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold text-center mb-6 text-purple-700">
-        煽りクソコメ生成AI
-      </h1>
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8">
+      <h1 className="text-2xl font-bold text-purple-700 mb-4">煽りクソコメ生成AI</h1>
 
-      <div className="max-w-xl mx-auto bg-white shadow-md rounded-lg p-6 space-y-6">
-        {/* 入力欄 */}
+      {/* チャット画面 */}
+      <div className="w-full max-w-xl bg-white rounded shadow p-4 space-y-3 overflow-y-auto h-[500px]">
+        {chatLog.map((msg, index) => (
+          <div
+            key={index}
+            className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+          >
+            <div
+              className={`px-4 py-2 rounded-lg max-w-xs ${
+                msg.sender === "user"
+                  ? "bg-purple-200 text-right"
+                  : "bg-gray-200 text-left"
+              }`}
+            >
+              {msg.text}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* 入力欄と送信UI */}
+      <div className="w-full max-w-xl mt-4 space-y-3">
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="煽ってほしい内容を入力してください"
-          className="w-full border border-gray-300 rounded p-3"
-          rows={4}
+          placeholder="入力"
+          className="w-full border rounded p-2"
+          rows={2}
         />
 
-        {/* スタイル選択 */}
-        <div>
-          <label className="block font-semibold mb-1">スタイル:</label>
+        <div className="flex items-center space-x-4">
           <select
             value={style}
             onChange={(e) => setStyle(e.target.value)}
-            className="w-full border border-gray-300 rounded p-2"
+            className="border rounded p-2 flex-1"
           >
             <option value="5ch風">5ch風</option>
             <option value="毒舌風">毒舌風</option>
             <option value="冷静な皮肉">冷静な皮肉</option>
           </select>
+          <button
+            onClick={handleSubmit}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
+          >
+            生成
+          </button>
         </div>
-
-        {/* 煽り強度スライダー */}
-        <div>
-          <label className="block font-semibold mb-1">
-            煽り強度: {intensity}/10
-          </label>
-          <input
-            type="range"
-            min={1}
-            max={10}
-            value={intensity}
-            onChange={(e) => setIntensity(Number(e.target.value))}
-            className="w-full"
-          />
-        </div>
-
-        {/* 生成ボタン */}
-        <button
-          onClick={handleSubmit}
-          className="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700"
-        >
-          生成する
-        </button>
-
-        {/* 出力コメント */}
-        {result && (
-          <div className="mt-6 border-t pt-4 text-gray-800">
-            <h2 className="font-semibold text-lg mb-2">生成されたクソコメ:</h2>
-            <p className="whitespace-pre-line">{result}</p>
-          </div>
-        )}
       </div>
     </div>
   );
 }
-
