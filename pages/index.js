@@ -3,6 +3,7 @@ import { useState } from "react";
 export default function Home() {
   const [input, setInput] = useState("");
   const [chatLog, setChatLog] = useState([]);
+  const [responseCount, setResponseCount] = useState(0);
 
   const handleSubmit = async () => {
     if (!input.trim()) return;
@@ -14,19 +15,56 @@ export default function Home() {
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: input, style: "5ch風" }),
+      body: JSON.stringify({ prompt: input }),
     });
 
     const data = await res.json();
-    setChatLog([...newLog, { sender: "bot", text: data.comment }]);
+    const botReply = { sender: "bot", text: data.comment };
+
+    const updatedLog = [...newLog, botReply];
+    const newCount = responseCount + 1;
+    setResponseCount(newCount);
+
+    // AIで話題分類（別エンドポイントを叩く）
+    if (newCount % 3 === 0) {
+      const topicRes = await fetch("/api/topic", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+      });
+      const topicData = await topicRes.json();
+
+      const topic = topicData.topic;
+      const getAffiliateMessage = (topic) => {
+        switch (topic) {
+          case "relax":
+            return `疲れてんじゃねーの？www これでも使っとけよ → [爆睡入浴剤](https://www.amazon.co.jp/dp/B01N7OAH3I?tag=YOUR-ID)`;
+          case "gift":
+            return `誕生日アピールうざw これでも贈っとけよ → [Amazonギフト券](https://www.amazon.co.jp/dp/B004N3APGO?tag=YOUR-ID)`;
+          case "study":
+            return `勉強とか意識高すぎて草w ほれ → [集中サプリ](https://www.amazon.co.jp/dp/B08L5Y7R3Z?tag=YOUR-ID)`;
+          case "love":
+            return `恋バナとか昭和かよw これでも使ってろ → [モテ香水](https://www.amazon.co.jp/dp/B0012ZS1FE?tag=YOUR-ID)`;
+          default:
+            return null;
+        }
+      };
+
+      const affiliateMsg = getAffiliateMessage(topic);
+      if (affiliateMsg) {
+        updatedLog.push({ sender: "bot", text: affiliateMsg });
+      }
+    }
+
+    setChatLog(updatedLog);
   };
 
   return (
     <div className="min-h-screen bg-[#fef6e4] font-sans flex flex-col items-center py-8 text-[#5b3a29]">
       <h1 className="text-2xl font-bold text-[#8b5e3c] mb-4 flex items-center space-x-2">
-  <img src="/ai-icon.png" alt="キャラ" className="w-16 h-16 rounded-full" />
-  <span>煽りクソコメ生成AI</span>
-</h1>
+        <img src="/ai-icon.png" alt="キャラ" className="w-14 h-14 rounded-full" />
+        <span>煽りクソコメ生成AI</span>
+      </h1>
 
       {/* チャット画面 */}
       <div className="w-full max-w-xl bg-[#fffaf0] rounded shadow p-4 space-y-3 overflow-y-auto h-[500px] border border-[#d6a77a]">
@@ -51,7 +89,11 @@ export default function Home() {
                   : "bg-[#f5e0c3] text-gray-800 text-left"
               }`}
             >
-              {msg.text}
+              {msg.text.includes("http") ? (
+                <span dangerouslySetInnerHTML={{ __html: msg.text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="underline text-blue-600 hover:text-blue-800">$1</a>') }} />
+              ) : (
+                msg.text
+              )}
             </div>
           </div>
         ))}
@@ -62,7 +104,7 @@ export default function Home() {
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="入力"
+          placeholder="煽ってほしい内容を入力"
           className="w-full border border-[#d4a373] rounded p-2 bg-[#fffdf5] text-[#5b3a29]"
           rows={2}
         />
@@ -79,3 +121,4 @@ export default function Home() {
     </div>
   );
 }
+
