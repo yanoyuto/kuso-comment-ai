@@ -1,3 +1,4 @@
+import Script from "next/script";
 import { useState } from "react";
 
 export default function Home() {
@@ -112,11 +113,12 @@ export default function Home() {
       </div>
 
       {/* ページ最下部の AdSense スクリプト（クローラ用） */}
-      <script
+      <Script
+        strategy="afterInteractive"
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7289968025162748"
         crossOrigin="anonymous"
       />
     </>
-  );
+  )
 }
