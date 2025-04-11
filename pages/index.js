@@ -23,7 +23,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#fef6e4] font-sans flex flex-col items-center py-8 text-[#5b3a29]">
-      <h1 className="text-2xl font-bold text-[#8b5e3c] mb-4">煽りクソコメ生成AI</h1>
+      <h1 className="text-2xl font-bold text-[#8b5e3c] mb-4 flex items-center space-x-2">
+  <img src="/ai-icon.png" alt="キャラ" className="w-16 h-16 rounded-full" />
+  <span>煽りクソコメ生成AI</span>
+</h1>
 
       {/* チャット画面 */}
       <div className="w-full max-w-xl bg-[#fffaf0] rounded shadow p-4 space-y-3 overflow-y-auto h-[500px] border border-[#d6a77a]">
@@ -59,7 +62,7 @@ export default function Home() {
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="煽ってほしい内容を入力"
+          placeholder="入力"
           className="w-full border border-[#d4a373] rounded p-2 bg-[#fffdf5] text-[#5b3a29]"
           rows={2}
         />
