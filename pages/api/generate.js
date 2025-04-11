@@ -11,11 +11,7 @@ export default async function handler(req, res) {
 
   const { prompt, style } = req.body; // ← intensityはもう受け取らない！
 
-  const stylePrompt = {
-    "5ch風": "5chのスレに書かれていそうな、短く攻撃的でネタっぽい煽り口調でコメントしてください。",
-    "毒舌風": "まるで辛口評論家のように、ストレートに毒舌なコメントをしてください。",
-    "冷静な皮肉": "一見丁寧で冷静に見えるが、じわじわ刺さる皮肉を含んだコメントにしてください。",
-  }[style] || "煽りコメントを作ってください。";
+  const stylePrompt = "5chのスレに書かれていそうな、短く攻撃的でネタっぽい煽り口調でコメントしてください。wを語尾などに程よく入れてください";
 
   try {
     const chatCompletion = await openai.chat.completions.create({
