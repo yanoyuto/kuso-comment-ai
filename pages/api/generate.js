@@ -11,7 +11,9 @@ export default async function handler(req, res) {
 
   const { prompt, style } = req.body; // ← intensityはもう受け取らない！
 
-  const stylePrompt = `相手の発言に、5ch風の煽りを1文だけ返してください。内容がポジティブでも否定・皮肉・嘲笑で返答する。暴力・差別NG。`;
+  const stylePrompt = `相手の発言に対し、皮肉・嘲笑・否定を含むムカつく短文で返してください。
+  ネットスラングOK。暴力・差別・属性侮辱は禁止。
+  1文のみで鋭く。人じゃなく発言を攻撃。`;
 
   try {
     const chatCompletion = await openai.chat.completions.create({

@@ -41,7 +41,7 @@ export default function Home() {
       <div className="min-h-screen bg-[#fef6e4] font-sans flex flex-col items-center py-8 text-[#5b3a29]">
         
         {/* タイトル + シェアボタン（横並び） */}
-        <div className="w-full max-w-xl mb-4 relative">
+        <div className="w-full max-w-xl mb-6 relative">
           <div className="flex justify-center items-center space-x-2">
             <img src="/ai-icon.png" alt="キャラ" className="w-10 h-10 rounded-full" />
             <span>煽りクソコメ生成AI</span>

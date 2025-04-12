@@ -1,0 +1,46 @@
+// pages/privacy.js
+export default function PrivacyPolicy() {
+  return (
+    <div className="max-w-3xl mx-auto px-6 py-10 text-[#5b3a29] bg-[#fffaf0]">
+      <h1 className="text-2xl font-bold mb-4">プライバシーポリシー</h1>
+      <p className="mb-4">
+        当サイト（煽りクソコメ生成AI）では、ユーザーのプライバシーを尊重し、以下の方針に基づいて個人情報を取り扱います。
+      </p>
+
+      <h2 className="text-xl font-bold mt-6 mb-2">1. 広告について</h2>
+      <p className="mb-4">
+        当サイトでは、第三者配信の広告サービス「Google AdSense（グーグルアドセンス）」を利用しています。
+        Googleなどの第三者広告配信事業者は、ユーザーの興味に応じた広告を表示するためにCookieを使用することがあります。<br />
+        Google広告におけるCookieの取り扱いや無効化については、<a href="https://policies.google.com/technologies/ads?hl=ja" target="_blank" className="underline text-blue-600">こちら</a>をご参照ください。
+      </p>
+
+      <h2 className="text-xl font-bold mt-6 mb-2">2. アクセス解析について</h2>
+      <p className="mb-4">
+        当サイトでは、アクセス解析ツール「Google Analytics」を利用する可能性があります。
+        これにより、Cookieを利用して匿名のトラフィックデータを収集することがあります。個人を特定する情報は含まれません。
+      </p>
+
+      <h2 className="text-xl font-bold mt-6 mb-2">3. 個人情報の利用について</h2>
+      <p className="mb-4">
+        当サイトでは、基本的にユーザーの個人を特定する情報を収集・保存しておりません。
+      </p>
+
+      <h2 className="text-xl font-bold mt-6 mb-2">4. プライバシーポリシーの変更について</h2>
+      <p className="mb-4">
+        必要に応じて、内容を予告なく変更することがあります。最新版は常に当ページにてご確認ください。
+      </p>
+
+      <h2 className="text-xl font-bold mt-6 mb-2">5. コンテンツの健全性について</h2>
+      <p className="mb-4">
+        当サイトでは、AIが自動生成するコンテンツにおいても、Googleのコンテンツポリシーに従い、暴力的・差別的・ヘイト的な表現が出力されないよう設計しております。
+      </p>
+
+      <hr className="my-6" />
+      <p className="text-sm text-gray-500">
+        制定日：2024年4月12日<br />
+        運営者：煽りクソコメAI運営チーム（個人）
+        ※本サービスは無料で提供しており、個別の問い合わせ窓口は設けておりません。
+      </p>
+    </div>
+  );
+}
