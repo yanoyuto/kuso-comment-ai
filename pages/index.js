@@ -41,13 +41,13 @@ export default function Home() {
       <div className="min-h-screen bg-[#fef6e4] font-sans flex flex-col items-center py-8 text-[#5b3a29]">
         
         {/* タイトル + シェアボタン（横並び） */}
-        <div className="text-xl font-semibold text-[#8b5e3c] mb-4 flex items-center justify-between center max-w-xl">
-          <div className="flex items-center space-x-2">
+        <div className="w-full max-w-xl mb-4 relative">
+          <div className="flex justify-center items-center space-x-2">
             <img src="/ai-icon.png" alt="キャラ" className="w-10 h-10 rounded-full" />
             <span>煽りクソコメ生成AI</span>
           </div>
   
-          <div className="flex space-x-2 ml-9">
+          <div className="absolute top-1 right-2 flex space-x-2">
             <a
               href={twitterUrl}
               target="_blank"
