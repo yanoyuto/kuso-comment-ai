@@ -6,6 +6,13 @@ export default function Home() {
   const [chatLog, setChatLog] = useState([]);
   const [responseCount, setResponseCount] = useState(0);
 
+  const shareUrl = encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')
+  const message = encodeURIComponent('煽りクソコメ生成AIでイラッとするコメントを生成してみた。')
+  const hashtags = encodeURIComponent('煽りクソコメ,AI,おもしろWeb')
+
+  const twitterUrl = `https://twitter.com/intent/tweet?url=${shareUrl}&text=${message}&hashtags=${hashtags}`
+  const lineUrl = `https://social-plugins.line.me/lineit/share?url=${shareUrl}`
+
   const handleSubmit = async () => {
     if (!input.trim()) return;
 
@@ -32,11 +39,34 @@ export default function Home() {
   return (
     <>
       <div className="min-h-screen bg-[#fef6e4] font-sans flex flex-col items-center py-8 text-[#5b3a29]">
-        <h1 className="text-2xl font-bold text-[#8b5e3c] mb-4 flex items-center space-x-2">
-          <img src="/ai-icon.png" alt="キャラ" className="w-14 h-14 rounded-full" />
-          <span>煽りクソコメ生成AI</span>
-        </h1>
-
+        
+        {/* タイトル + シェアボタン（横並び） */}
+        <div className="text-xl font-semibold text-[#8b5e3c] mb-4 flex items-center justify-between center max-w-xl">
+          <div className="flex items-center space-x-2">
+            <img src="/ai-icon.png" alt="キャラ" className="w-10 h-10 rounded-full" />
+            <span>煽りクソコメ生成AI</span>
+          </div>
+  
+          <div className="flex space-x-2 ml-9">
+            <a
+              href={twitterUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+            >
+              X
+            </a>
+            <a
+              href={lineUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+            >
+              LINE
+            </a>
+          </div>
+        </div>
+  
         {/* チャット画面 */}
         <div className="w-full max-w-xl bg-[#fffaf0] rounded shadow p-4 space-y-3 overflow-y-auto h-[500px] border border-[#d6a77a]">
           {chatLog.map((msg, index) => (
@@ -71,7 +101,7 @@ export default function Home() {
               </div>
             </div>
           ))}
-
+  
           {/* 3回に1回広告表示 */}
           {responseCount > 0 && responseCount % 3 === 0 && (
             <div className="w-full bg-white border border-gray-300 rounded p-4 text-center shadow mt-4">
@@ -91,8 +121,8 @@ export default function Home() {
             </div>
           )}
         </div>
-
-        {/* 入力欄と送信UI */}
+  
+        {/* 入力欄 */}
         <div className="w-full max-w-xl mt-4 space-y-3">
           <textarea
             value={input}
@@ -111,8 +141,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      {/* ページ最下部の AdSense スクリプト（クローラ用） */}
+  
+      {/* AdSense Script */}
       <Script
         strategy="afterInteractive"
         async
@@ -121,4 +151,5 @@ export default function Home() {
       />
     </>
   )
+  
 }
