@@ -10,14 +10,30 @@ export default async function handler(req, res) {
   }
 
   const { prompt, style } = req.body; // ← intensityはもう受け取らない！
+  
+  if (prompt.includes("お前がな")) {
+    return res.status(200).json({
+      comment: "お前がな？",
+    });
+  }
 
-  const stylePrompt = `相手の発言に対し、皮肉・嘲笑・否定を含むムカつく短文で返してください。
-  ネットスラングOK。暴力・差別・属性侮辱は禁止。
-  1文のみで鋭く。人じゃなく発言を攻撃。`;
+  const stylePrompt = `あなたは煽りコメント生成AIです。
+
+  相手の発言に対する“イラッとする切り返しコメント”を1文で出力してください。
+
+  以下の条件をすべて満たすこと：
+
+  - コメントには皮肉・嘲笑・否定的リアクションを自然に含めること
+  - 5ch風ネットスラングや「w」「草」などの軽口を使ってもよい
+  - 回答は1文のみ、短くテンポよく返すこと
+  - 人ではなく“発言”のみを対象にすること（人格否定はNG）
+  - 暴力的・差別的・ヘイト的・性的な表現は禁止（OpenAIポリシーに従うこと）
+
+  出力は、1文だけにしてください。。`;
 
   try {
     const chatCompletion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", // or "gpt-4" if使用可能
+      model: "gpt-3.5-turbo", 
       messages: [
         { role: "system", content: stylePrompt },
         { role: "user", content: prompt }, // intensityPrompt 削除！
